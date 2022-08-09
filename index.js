@@ -54,13 +54,6 @@ async function run() {
             res.send(users);
         });
 
-	//Delete korilam
-	app.get('/delta',async(req,res)=>{
-	const filter ={title:'How to Become a Programmer'};
-	const del =await articleCollection.deleteOne(filter);
-	res.send(del)
-	})
-
         //get admin
         // app.get('/admin/:email', async (req, res) => {
         //     const email = req.params.email;
