@@ -54,7 +54,7 @@ async function run() {
             res.send(users);
         });
 
-	//Delete 
+	//Delete korilam
 	app.get('/delta',async(req,res)=>{
 	const filter ={title:'How to Become a Programmer'};
 	const del =await articleCollection.deleteOne(filter);
