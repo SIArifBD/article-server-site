@@ -54,6 +54,12 @@ async function run() {
             res.send(users);
         });
 
+        // //get writter
+        // app.get('/user', verifyJWT, async (req, res) => {
+        //     const users = await userCollection.find().toArray();
+        //     res.send(users);
+        // });
+
         //get admin
         // app.get('/admin/:email', async (req, res) => {
         //     const email = req.params.email;
