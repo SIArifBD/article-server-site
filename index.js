@@ -123,7 +123,7 @@ async function run() {
         //     res.send(result);
         // });
 
-        // delete single article id 
+        // delete single article id api
         app.delete('/article/:id',async(req,res) =>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)}
@@ -132,7 +132,7 @@ async function run() {
         })
 
 
-        //get single article user email
+        //get single article user email api
         app.get('/article/:email', async (req, res) => {
             const email = req.params.email;        
             const result = await articleCollection.find({ userEmail: email }).toArray();
