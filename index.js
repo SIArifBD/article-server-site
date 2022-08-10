@@ -135,8 +135,14 @@ async function run() {
 
         //post comment 
         app.post('/postComment', async (req, res) => {
-            const postComment = req.body;
-            const result = await commentCollection.insertOne(postComment);
+            const commnet = req.body;
+            const result = await commentCollection.insertOne(commnet);
+            res.send(result);
+        })
+
+        //get Post 
+        app.get('/getComment', async (req, res) => {
+            const result = await commentCollection.find({}).toArray();
             res.send(result);
         })
 
