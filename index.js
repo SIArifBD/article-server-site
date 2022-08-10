@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// mongoDB
+// mongoDB 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.zv0zn.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -121,11 +121,27 @@ async function run() {
             res.send(result);
         });
 
-        //get single article 
-        app.get('/article/:id', async (req, res) => {
+        // // get single article id
+        // app.get('/article/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const result = await articleCollection.findOne(query);
+        //     res.send(result);
+        // });
+
+        // delete single article id 
+        app.delete('/article/:id',async(req,res) =>{
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await articleCollection.findOne(query);
+            const query = {_id: ObjectId(id)}
+            const result = await articleCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+        //get single article user email
+        app.get('/article/:email', async (req, res) => {
+            const email = req.params.email;        
+            const result = await articleCollection.find({ userEmail: email }).toArray();
             res.send(result);
         });
 
