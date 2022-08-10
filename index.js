@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 //midleware
@@ -35,6 +35,8 @@ async function run() {
         await client.connect();
         const articleCollection = client.db('article-publishing').collection('articles');
         const userCollection = client.db('article-publishing').collection('users');
+        const commentCollection = client.db('article-commnet').collection('allCommnet');
+
 
         //admin verify
         // const verifyAdmin = async (req, res, next) => {
@@ -129,6 +131,17 @@ async function run() {
             const result = await articleCollection.insertOne(article);
             res.send(result);
         });
+
+
+        //post comment 
+        app.post('/postComment', async (req, res) => {
+            const postComment = req.body;
+            const result = await commentCollection.insertOne(postComment);
+            res.send(result);
+        })
+
+
+
     }
     finally {
 
