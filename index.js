@@ -36,7 +36,7 @@ async function run() {
         const articleCollection = client.db('article-publishing').collection('articles');
         const userCollection = client.db('article-publishing').collection('users');
 
-        //admin verify
+        //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
         //     const requester = req.decoded.email;
         //     const requesterAccount = await userCollection.findOne({ email: requester });
@@ -49,7 +49,7 @@ async function run() {
         // };
 
         //get all user
-        app.get('/user', verifyJWT, async (req, res) => {
+        app.get('/user', async (req, res) => {
             const users = await userCollection.find().toArray();
             res.send(users);
         });
@@ -69,15 +69,15 @@ async function run() {
         // });
 
         // //make admin
-        // app.put('/user/admin/:email', verifyJWT, verifyAdmin, async (req, res) => {
-        //     const email = req.params.email;
-        //     const filter = { email: email };
-        //     const updateDoc = {
-        //         $set: { role: 'admin' },
-        //     };
-        //     const result = await userCollection.updateOne(filter, updateDoc);
-        //     res.send(result);
-        // });
+        app.put('/user/admin/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const updateDoc = {
+                $set: { role: 'admin' },
+            };
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        });
 
         //user email send with jwt token
         app.put('/user/:email', async (req, res) => {
@@ -122,15 +122,17 @@ async function run() {
             res.send(result);
         });
 
-        // // get single article id
-        // app.get('/article/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const result = await articleCollection.findOne(query);
-        //     res.send(result);
-        // });
+        
 
-        // delete single article id api
+        // // get single article id
+        app.get('/article/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await articleCollection.findOne(query);
+            res.send(result);
+        });
+
+        // delete single article id  delete
         app.delete('/article/:id',async(req,res) =>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)}
@@ -138,13 +140,24 @@ async function run() {
             res.send(result);
         })
 
-
+ 
         //get single article user email api
         app.get('/article/:email', async (req, res) => {
-            const email = req.params.email;        
+            const email = req.params.email;
+            console.log('user params', email)      
             const result = await articleCollection.find({ userEmail: email }).toArray();
             res.send(result);
         });
+
+        
+    app.get('/article/:myarticle', async (req, res) => {
+        const email = req.query.email;
+        const query = { userEmail: email };
+        const myarticle = await articleCollection.find(query).toArray();
+        res.send(myarticle)
+      })
+
+
 
         //post article
         app.post('/article', async (req, res) => {
