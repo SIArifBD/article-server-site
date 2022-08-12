@@ -147,11 +147,6 @@ async function run() {
             res.send(result);
         })
 
-
-
-
-
-
         //post article
         app.post('/article', async (req, res) => {
             const article = req.body;
