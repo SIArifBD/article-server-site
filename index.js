@@ -105,7 +105,7 @@ async function run() {
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
             res.send({ result, token });
         });
- 
+
         // cruent user 
         app.get('/user/:currentUser', verifyJWT, async (req, res) => {
             const email = req.params.currentUser;
@@ -122,40 +122,41 @@ async function run() {
             res.send(result);
         });
 
-        
-
-        // // get single article id
-        app.get('/article/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await articleCollection.findOne(query);
-            res.send(result);
-        });
-
-        // delete single article id  delete
-        app.delete('/article/:id',async(req,res) =>{
-            const id = req.params.id;
-            const query = {_id: ObjectId(id)}
-            const result = await articleCollection.deleteOne(query);
-            res.send(result);
-        })
-
- 
         //get single article user email api
         app.get('/article/:email', async (req, res) => {
             const email = req.params.email;
-            console.log('user params', email)      
             const result = await articleCollection.find({ userEmail: email }).toArray();
             res.send(result);
         });
 
-        
-    app.get('/article/:myarticle', async (req, res) => {
-        const email = req.query.email;
-        const query = { userEmail: email };
-        const myarticle = await articleCollection.find(query).toArray();
-        res.send(myarticle)
-      })
+        app.get('/article/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('single post id',id)
+            const query = { _id: ObjectId(id) }
+            const result = await articleCollection.findOne(id).toArray();
+            res.send(result);
+        })
+
+
+
+        // // get single article id
+        // app.get('/article/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const result = await articleCollection.findOne(query);
+        //     res.send(result);
+        // });
+
+        // delete single article id  delete
+        app.delete('/article/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await articleCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+
 
 
 
