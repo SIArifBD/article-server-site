@@ -137,6 +137,7 @@ async function run() {
             res.send(result);
         });
 
+
         // delete single article id  delete
         app.delete('/article/:id', async (req, res) => {
             const id = req.params.id;
