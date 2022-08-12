@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 
-//midleware
+//middleware
 app.use(cors());
 app.use(express.json());
 
@@ -55,7 +55,7 @@ async function run() {
             res.send(users);
         });
 
-        // //get writter
+        // //get writer
         // app.get('/user', verifyJWT, async (req, res) => {
         //     const users = await userCollection.find().toArray();
         //     res.send(users);
@@ -107,7 +107,7 @@ async function run() {
             res.send({ result, token });
         });
 
-        // cruent user 
+        // current user 
         app.get('/user/:currentUser', verifyJWT, async (req, res) => {
             const email = req.params.currentUser;
             const query = { email: email }
