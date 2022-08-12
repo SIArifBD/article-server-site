@@ -123,11 +123,11 @@ async function run() {
         });
 
         //get single article user email api
-        app.get('/article/:email', async (req, res) => {
-            const email = req.params.email;
-            const result = await articleCollection.find({ userEmail: email }).toArray();
-            res.send(result);
-        });
+        // app.get('/article/:email', async (req, res) => {
+        //     const email = req.params.email;
+        //     const result = await articleCollection.find({ userEmail: email }).toArray();
+        //     res.send(result);
+        // });
 
         // // get single article id
         app.get('/article/:id', async (req, res) => {
