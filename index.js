@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId,} = require('mongodb');
 const port = process.env.PORT || 5000;
 
 //midleware
@@ -129,23 +129,13 @@ async function run() {
             res.send(result);
         });
 
+        // // get single article id
         app.get('/article/:id', async (req, res) => {
             const id = req.params.id;
-            console.log('single post id',id)
-            const query = { _id: ObjectId(id) }
-            const result = await articleCollection.findOne(id).toArray();
+            const query = { _id: ObjectId(id) };
+            const result = await articleCollection.findOne(query);
             res.send(result);
-        })
-
-
-
-        // // get single article id
-        // app.get('/article/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const result = await articleCollection.findOne(query);
-        //     res.send(result);
-        // });
+        });
 
         // delete single article id  delete
         app.delete('/article/:id', async (req, res) => {
