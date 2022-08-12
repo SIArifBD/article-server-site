@@ -153,6 +153,8 @@ async function run() {
             const result = await articleCollection.insertOne(article);
             res.send(result);
         });
+
+        //comment api get
     }
     finally {
 
