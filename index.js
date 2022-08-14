@@ -36,6 +36,7 @@ async function run() {
         await client.connect();
         const articleCollection = client.db('article-publishing').collection('articles');
         const userCollection = client.db('article-publishing').collection('users');
+        const userCommmentCollection = client.db('article-publishing-comment').collection('allComment');
 
         //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
@@ -131,10 +132,10 @@ async function run() {
         });
 
         // // get single article id
-        app.get('/article/:id', async (req, res) => {
+        app.get('/singleArticle/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await articleCollection.findOne(query);
+            const filter = { _id: ObjectId(id) };
+            const result = await articleCollection.findOne(filter);
             res.send(result);
         });
 
@@ -154,7 +155,20 @@ async function run() {
             res.send(result);
         });
 
-        //comment api get
+        //post comment
+        app.post('/doComment', async (req, res) => {
+            const commentData = req.body;
+            const result = await userCommmentCollection.insertOne(commentData);
+            res.send(result);
+        })
+
+        //get Comment
+        app.get('/getPostComment', async (req, res) => {
+            const filter = { commnet: -1 };
+            const result = await userCommmentCollection.find({}).sort(filter).toArray();
+            res.send(result);
+        })
+
     }
     finally {
 
