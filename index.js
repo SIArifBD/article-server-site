@@ -3,7 +3,8 @@ const cors = require('cors');
 const app = express();
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId, } = require('mongodb');
+
 const port = process.env.PORT || 5000;
 
 //middleware
@@ -70,7 +71,7 @@ async function run() {
         //     res.send({ admin: isAdmin });
         // });
 
-        // //make admin
+        // //make admins
         app.put('/user/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const filter = { email: email };
@@ -130,6 +131,7 @@ async function run() {
             const result = await articleCollection.find({ userEmail: email }).toArray();
             res.send(result);
         });
+
 
         // // get single article id
         app.get('/singleArticle/:id', async (req, res) => {
