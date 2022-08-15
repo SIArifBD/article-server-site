@@ -36,7 +36,7 @@ async function run() {
         await client.connect();
         const articleCollection = client.db('article-publishing').collection('articles');
         const userCollection = client.db('article-publishing').collection('users');
-        const userCommmentCollection = client.db('article-publishing-comment').collection('allComment');
+        const userCommentCollection = client.db('article-publishing-comment').collection('allComment');
 
         //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
@@ -158,14 +158,14 @@ async function run() {
         //post comment
         app.post('/doComment', async (req, res) => {
             const commentData = req.body;
-            const result = await userCommmentCollection.insertOne(commentData);
+            const result = await userCommentCollection.insertOne(commentData);
             res.send(result);
         })
 
         //get Comment
         app.get('/getPostComment', async (req, res) => {
             const filter = { commnet: -1 };
-            const result = await userCommmentCollection.find({}).sort(filter).toArray();
+            const result = await userCommentCollection.find({}).sort(filter).toArray();
             res.send(result);
         })
 
