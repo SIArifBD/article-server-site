@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion, ObjectId,} = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId, } = require('mongodb');
 const port = process.env.PORT || 5000;
 
 //midleware
@@ -68,7 +68,7 @@ async function run() {
         //     res.send({ admin: isAdmin });
         // });
 
-        // //make admin
+        // //make admins
         app.put('/user/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const filter = { email: email };
@@ -122,12 +122,15 @@ async function run() {
             res.send(result);
         });
 
-        //get single article user email api
-        // app.get('/article/:email', async (req, res) => {
-        //     const email = req.params.email;
-        //     const result = await articleCollection.find({ userEmail: email }).toArray();
-        //     res.send(result);
-        // });
+
+        //get single myarticle user email api
+        app.get('/myarticle', async (req, res) => {
+            const userEmail = req.query.userEmail;
+            const query = {userEmail: userEmail}
+            const result = await articleCollection.find(query).toArray();
+            res.send(result);
+        });
+
 
         // // get single article id
         app.get('/article/:id', async (req, res) => {
