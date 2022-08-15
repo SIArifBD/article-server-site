@@ -4,12 +4,14 @@ const app = express();
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId, } = require('mongodb');
+
 const port = process.env.PORT || 5000;
 
-//midleware
+//middleware
 app.use(cors());
 app.use(express.json());
 
+//
 // mongoDB 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.zv0zn.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -35,6 +37,7 @@ async function run() {
         await client.connect();
         const articleCollection = client.db('article-publishing').collection('articles');
         const userCollection = client.db('article-publishing').collection('users');
+        const userCommmentCollection = client.db('article-publishing-comment').collection('allComment');
 
         //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
@@ -54,7 +57,7 @@ async function run() {
             res.send(users);
         });
 
-        // //get writter
+        // //get writer
         // app.get('/user', verifyJWT, async (req, res) => {
         //     const users = await userCollection.find().toArray();
         //     res.send(users);
@@ -106,7 +109,7 @@ async function run() {
             res.send({ result, token });
         });
 
-        // cruent user 
+        // current user 
         app.get('/user/:currentUser', verifyJWT, async (req, res) => {
             const email = req.params.currentUser;
             const query = { email: email }
@@ -122,21 +125,19 @@ async function run() {
             res.send(result);
         });
 
-
-        //get single myarticle user email api
-        app.get('/myarticle', async (req, res) => {
-            const userEmail = req.query.userEmail;
-            const query = {userEmail: userEmail}
-            const result = await articleCollection.find(query).toArray();
+        //get single article user email api
+        app.get('/article/:email', async (req, res) => {
+            const email = req.params.email;
+            const result = await articleCollection.find({ userEmail: email }).toArray();
             res.send(result);
         });
 
 
         // // get single article id
-        app.get('/article/:id', async (req, res) => {
+        app.get('/singleArticle/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await articleCollection.findOne(query);
+            const filter = { _id: ObjectId(id) };
+            const result = await articleCollection.findOne(filter);
             res.send(result);
         });
 
@@ -149,17 +150,27 @@ async function run() {
             res.send(result);
         })
 
-
-
-
-
-
         //post article
         app.post('/article', async (req, res) => {
             const article = req.body;
             const result = await articleCollection.insertOne(article);
             res.send(result);
         });
+
+        //post comment
+        app.post('/doComment', async (req, res) => {
+            const commentData = req.body;
+            const result = await userCommmentCollection.insertOne(commentData);
+            res.send(result);
+        })
+
+        //get Comment
+        app.get('/getPostComment', async (req, res) => {
+            const filter = { commnet: -1 };
+            const result = await userCommmentCollection.find({}).sort(filter).toArray();
+            res.send(result);
+        })
+
     }
     finally {
 
