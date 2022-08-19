@@ -71,7 +71,7 @@ async function run() {
         // });
 
         // //make admin
-        app.put('/user/admin/:email', verifyJWT, async (req, res) => {
+        app.put('/user/admin/:email', async (req, res) => {
             const email = req.params.email;
             const filter = { email: email };
             const updateDoc = {
@@ -145,6 +145,15 @@ async function run() {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
             const result = await articleCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+        // delete single article id  delete
+        app.delete('/article/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await userCollection.deleteOne(query);
             res.send(result);
         })
 
