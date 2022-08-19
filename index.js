@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
@@ -37,6 +38,7 @@ async function run() {
         const articleCollection = client.db('article-publishing').collection('articles');
         const userCollection = client.db('article-publishing').collection('users');
         const userCommentCollection = client.db('article-publishing-comment').collection('allComment');
+        const paymentCollection = client.db("article-publishing").collection("payments");
 
         //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
@@ -184,7 +186,20 @@ async function run() {
             const filter = { commnet: -1 };
             const result = await userCommentCollection.find({}).sort(filter).toArray();
             res.send(result);
-        })
+        });
+
+        //payment post api
+        app.post('create-payment-intent', async (req, res) => {
+            const article = req.body;
+            const price = article.price;
+            const amount = price * 100;
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: 'usd',
+                payment_method_types: ['card']
+            });
+            res.send({ clientSecret: paymentIntent.client_secret });
+        });
 
     }
     finally {
