@@ -189,7 +189,7 @@ async function run() {
         });
 
         //payment post api
-        app.post('create-payment-intent', async (req, res) => {
+        app.post('/create-payment-intent', async (req, res) => {
             const article = req.body;
             const price = article.price;
             const amount = price * 100;
