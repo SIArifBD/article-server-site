@@ -62,15 +62,15 @@ async function run() {
         //     res.send(users);
         // });
 
-        //get admin
-        // app.get('/admin/:email', async (req, res) => {
-        //     const email = req.params.email;
-        //     const user = await userCollection.findOne({ email: email });
-        //     const isAdmin = user.role === 'admin';
-        //     res.send({ admin: isAdmin });
-        // });
+        // Get admin 
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === 'admin';
+            res.send({ admin: isAdmin });
+        });
 
-        // //make admin
+        // //Make admin
         app.put('/user/admin/:email', async (req, res) => {
             const email = req.params.email;
             const filter = { email: email };
