@@ -64,7 +64,7 @@ async function run() {
         //     res.send(users);
         // });
 
-        // Get admin 
+        // Get admin user
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email });
