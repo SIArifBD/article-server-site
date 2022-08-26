@@ -204,9 +204,8 @@ async function run() {
 
         //payment confirm
         app.patch('/user/:email', verifyJWT, async (req, res) => {
-            const id = req.params.id;
             const payment = req.body;
-            const filter = { _id: ObjectId(id) };
+            const filter = { email: req.params.email };
             const updateDoc = {
                 $set: {
                     paid: true,
