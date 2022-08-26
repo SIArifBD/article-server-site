@@ -203,7 +203,7 @@ async function run() {
         });
 
         //payment confirm
-        app.patch('/article/:email', verifyJWT, async (req, res) => {
+        app.patch('/user/:email', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const payment = req.body;
             const filter = { _id: ObjectId(id) };
