@@ -39,6 +39,7 @@ async function run() {
         const userCollection = client.db('article-publishing').collection('users');
         const userCommentCollection = client.db('article-publishing-comment').collection('allComment');
         const paymentCollection = client.db("article-publishing").collection("payments");
+        const premiumUserCollection = client.db("article-publishing").collection("premiumUser");
 
         //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
@@ -200,6 +201,22 @@ async function run() {
             });
             res.send({ clientSecret: paymentIntent.client_secret });
         });
+
+        //payment confirm
+        app.patch('/article/:id', verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const payment = req.body;
+            const filter = { _id: ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    paid: true,
+                    transactionId: payment.transactionId
+                }
+            }
+            const result = await paymentCollection.insertOne(payment);
+            const updatedUser = await premiumUserCollection.updateOne(filter, updateDoc);
+            res.send(updateDoc);
+        })
 
     }
     finally {
