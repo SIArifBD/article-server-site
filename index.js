@@ -203,20 +203,23 @@ async function run() {
         });
 
         //payment confirm
-        app.patch('/user/:email', verifyJWT, async (req, res) => {
+        app.patch('/user/:email', verifyJWT, async (req, res) => {   
+            const email = req.params.email;        
             const payment = req.body;
-            const filter = { email: req.params.email };
+            const filter = { email: email };
+            console.log('filter', filter)
             const updateDoc = {
                 $set: {
                     paid: true,
+                    pack: payment.pack,
                     transactionId: payment.transactionId
                 }
             }
             const result = await paymentCollection.insertOne(payment);
-            const updatedUser = await premiumUserCollection.updateOne(filter, updateDoc);
-            res.send(updateDoc);
+            const updatedUser = await userCollection.updateOne(filter, updateDoc);
+            res.send(updatedUser);
         })
-
+ 
     }
     finally {
 
