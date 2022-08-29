@@ -41,6 +41,8 @@ async function run() {
         const paymentCollection = client.db("article-publishing").collection("payments");
         const premiumUserCollection = client.db("article-publishing").collection("premiumUser");
 
+        console.log("database Conneted")
+
         //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
         //     const requester = req.decoded.email;
@@ -58,12 +60,6 @@ async function run() {
             const users = await userCollection.find().toArray();
             res.send(users);
         });
-
-        // //get writer
-        // app.get('/user', verifyJWT, async (req, res) => {
-        //     const users = await userCollection.find().toArray();
-        //     res.send(users);
-        // });
 
         // Get admin user
         app.get('/admin/:email', async (req, res) => {
@@ -94,19 +90,6 @@ async function run() {
 
         //user email send with jwt token
         app.put('/user/:email', async (req, res) => {
-            const email = req.params.email;
-            const user = req.body;
-            const filter = { email: email };
-            const options = { upsert: true };
-            const updateDoc = {
-                $set: user,
-            };
-            const result = await userCollection.updateOne(filter, updateDoc, options);
-            const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
-            res.send({ result, token });
-        });
-
-        app.put('/user/:currentUser', async (req, res) => {
             const email = req.params.email;
             const user = req.body;
             const filter = { email: email };
@@ -216,6 +199,7 @@ async function run() {
             const updatedUser = await premiumUserCollection.updateOne(filter, updateDoc);
             res.send(updateDoc);
         })
+
 
     }
     finally {
