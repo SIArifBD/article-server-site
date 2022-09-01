@@ -127,6 +127,14 @@ async function run() {
             res.send(result);
         });
 
+        // // get premium single article id
+        app.get('/premiumSingleArticle/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await premiumArticleCollection.findOne(filter);
+            res.send(result);
+        });
+
         //get single article user email api
         app.get('/article/:email', async (req, res) => {
             const email = req.params.email;
