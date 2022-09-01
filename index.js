@@ -127,7 +127,7 @@ async function run() {
             res.send(result);
         });
 
-        // // get premium single article id
+        //get premium single article
         app.get('/premiumSingleArticle/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
@@ -142,7 +142,7 @@ async function run() {
             res.send(result);
         });
 
-        // // get single article id
+        // get single article id
         app.get('/singleArticle/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
