@@ -36,17 +36,17 @@ async function run() {
     try {
         await client.connect();
         const articleCollection = client.db('article-publishing').collection('articles');
-        const userCollection = client.db('article-publishing').collection('users');
+        const userNewCollection = client.db('NewAllUser').collection('NewAll');
         const userCommentCollection = client.db('article-publishing-comment').collection('allComment');
         const paymentCollection = client.db("article-publishing").collection("payments");
-        const premiumUserCollection = client.db("article-publishing").collection("premiumUser");
+        const premiumUserColl = client.db("article-publishing").collection("premiumUser");
 
         console.log("database Conneted")
 
         //admin verify verifyAdmin
         // const verifyAdmin = async (req, res, next) => {
         //     const requester = req.decoded.email;
-        //     const requesterAccount = await userCollection.findOne({ email: requester });
+        //     const requesterAccount = await userNewCollection.findOne({ email: requester });
         //     if (requesterAccount.role === 'admin') {
         //         next();
         //     }
@@ -56,15 +56,15 @@ async function run() {
         // };
 
         //get all user
-        app.get('/user', async (req, res) => {
-            const users = await userCollection.find().toArray();
+        app.get('/allUser', async (req, res) => {
+            const users = await userNewCollection.find({}).toArray();
             res.send(users);
         });
 
         // Get admin user
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
-            const user = await userCollection.findOne({ email: email });
+            const user = await userNewCollection.findOne({ email: email });
             const isAdmin = user.role === 'admin';
             res.send({ admin: isAdmin });
         });
@@ -76,7 +76,7 @@ async function run() {
             const updateDoc = {
                 $set: { role: 'admin' },
             };
-            const result = await userCollection.updateOne(filter, updateDoc);
+            const result = await userNewCollection.updateOne(filter, updateDoc);
             res.send(result);
         });
 
@@ -84,7 +84,7 @@ async function run() {
         app.delete('/user/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
-            const result = await userCollection.deleteOne(query);
+            const result = await userNewCollection.deleteOne(query);
             res.send(result);
         })
 
@@ -97,7 +97,7 @@ async function run() {
             const updateDoc = {
                 $set: user,
             };
-            const result = await userCollection.updateOne(filter, updateDoc, options);
+            const result = await userNewCollection.updateOne(filter, updateDoc, options);
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
             res.send({ result, token });
         });
@@ -106,7 +106,7 @@ async function run() {
         app.get('/user/:currentUser', verifyJWT, async (req, res) => {
             const email = req.params.currentUser;
             const query = { email: email }
-            const users = await userCollection.findOne(query);
+            const users = await userNewCollection.findOne(query);
             res.send(users);
         });
 
@@ -147,7 +147,7 @@ async function run() {
         app.delete('/article/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
-            const result = await userCollection.deleteOne(query);
+            const result = await userNewCollection.deleteOne(query);
             res.send(result);
         })
 
@@ -165,12 +165,14 @@ async function run() {
             res.send(result);
         })
 
-        //get Comment
-        app.get('/getPostComment', async (req, res) => {
-            const filter = { commnet: -1 };
-            const result = await userCommentCollection.find({}).sort(filter).toArray();
+
+        //Post Base Comment Filter
+        app.get('/filterCommnet/:id', async (req, res) => {
+            const id = req.params.id;
+            const postId = { postId: id }
+            const result = await userCommentCollection.find(postId).toArray();
             res.send(result);
-        });
+        })
 
         //payment post api
         app.post('/create-payment-intent', async (req, res) => {
@@ -196,8 +198,16 @@ async function run() {
                 }
             }
             const result = await paymentCollection.insertOne(payment);
-            const updatedUser = await premiumUserCollection.updateOne(filter, updateDoc);
+            const updatedUser = await premiumUserColl.updateOne(filter, updateDoc);
             res.send(updateDoc);
+        })
+
+
+        //Paid user 
+        app.get('/paidUser', async (req, res) => {
+            const filter = { paid: true };
+            const result = await userNewCollection.find(filter).toArray();
+            res.send(result);
         })
 
 
