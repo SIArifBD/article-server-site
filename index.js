@@ -36,6 +36,7 @@ async function run() {
     try {
         await client.connect();
         const articleCollection = client.db('article-publishing').collection('articles');
+        const premiumArticleCollection = client.db('article-publishing').collection('premiumArticle');
         const userNewCollection = client.db('NewAllUser').collection('NewAll');
         const userCommentCollection = client.db('article-publishing-comment').collection('allComment');
         const paymentCollection = client.db("article-publishing").collection("payments");
@@ -114,6 +115,14 @@ async function run() {
         app.get('/article', async (req, res) => {
             const query = {};
             const cursor = articleCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        //get all premiumArticle
+        app.get('/premium-article', async (req, res) => {
+            const query = {};
+            const cursor = premiumArticleCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
