@@ -111,12 +111,12 @@ async function run() {
         });
 
         //get all article
+        //get all article
         app.get('/article', async (req, res) => {
-            const query = {};
-            const cursor = articleCollection.find(query);
-            const result = await cursor.toArray();
+            const result = await articleCollection.find({}).toArray();
             res.send(result);
         });
+
 
         //get single article user email api
         app.get('/article/:email', async (req, res) => {
@@ -205,8 +205,8 @@ async function run() {
 
         //Paid user 
         app.get('/paidUser', async (req, res) => {
-            const filter = { paid: true };
-            const result = await userNewCollection.find(filter).toArray();
+            // const filter = { paid: true };
+            const result = await paymentCollection.find({}).toArray();
             res.send(result);
         })
 
