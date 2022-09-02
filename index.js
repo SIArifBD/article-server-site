@@ -160,7 +160,6 @@ async function run() {
             res.send(result);
         })
 
-
         // delete single article id  delete
         app.delete('/article/:id', async (req, res) => {
             const id = req.params.id;
@@ -220,14 +219,13 @@ async function run() {
             res.send(updateDoc);
         })
 
-
         //Paid user 
         app.get('/paidUser', async (req, res) => {
             // const filter = { paid: true };
             const result = await paymentCollection.find({}).toArray();
             res.send(result);
         })
-
+        //djdshjf
 
     }
     finally {
