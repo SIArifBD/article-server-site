@@ -224,8 +224,7 @@ async function run() {
             // const filter = { paid: true };
             const result = await paymentCollection.find({}).toArray();
             res.send(result);
-        })
-        //djdshjf
+        });
 
     }
     finally {
