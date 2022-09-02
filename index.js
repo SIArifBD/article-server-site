@@ -36,6 +36,7 @@ async function run() {
     try {
         await client.connect();
         const articleCollection = client.db('article-publishing').collection('articles');
+        const premiumArticleCollection = client.db('article-publishing').collection('premiumArticle');
         const userNewCollection = client.db('NewAllUser').collection('NewAll');
         const userCommentCollection = client.db('article-publishing-comment').collection('allComment');
         const paymentCollection = client.db("article-publishing").collection("payments");
@@ -118,6 +119,23 @@ async function run() {
         });
 
 
+        //get all premiumArticle
+        app.get('/premium-article', async (req, res) => {
+            const query = {};
+            const cursor = premiumArticleCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        //get premium single article
+        app.get('/premiumSingleArticle/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await premiumArticleCollection.findOne(filter);
+            res.send(result);
+        });
+
+
         //get single article user email api
         app.get('/article/:email', async (req, res) => {
             const email = req.params.email;
@@ -125,7 +143,7 @@ async function run() {
             res.send(result);
         });
 
-        // // get single article id
+        // get single article id
         app.get('/singleArticle/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
